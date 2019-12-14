@@ -374,6 +374,7 @@ static int doIndex(vector<string> subArgs) {
     Xapian::TermGenerator indexer;
     Xapian::Stem stemmer(langArg.getValue());
     indexer.set_stemmer(stemmer);
+    indexer.set_flags(Xapian::QueryParser::FLAG_CJK_NGRAM);
     
     for (auto op : opList) {
       auto dir = op.dir;
@@ -641,7 +642,7 @@ static int doSearch(vector<string> subArgs) {
       qp.set_database(db);
       qp.set_stemming_strategy(Xapian::QueryParser::STEM_SOME);
       unsigned flags =
-	Xapian::QueryParser::FLAG_DEFAULT |
+        Xapian::QueryParser::FLAG_DEFAULT | Xapian::QueryParser::FLAG_CJK_NGRAM |
 	(flag_pure_not.getValue() ?
 	 Xapian::QueryParser::FLAG_PURE_NOT : 0) |
 	(flag_boolean_any_case.getValue() ?
